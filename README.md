@@ -1,2 +1,2 @@
 # SLR203
-My repository for the course SLR 203 at Télécom Paris.
+My repository for the SLR 203 MQTT exercises with PAHO at Télécom Paris.
