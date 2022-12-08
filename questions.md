@@ -18,7 +18,7 @@ This is the longest period (in seconds) while trying to connect to the MQTT serv
 
 The connection is not secured. To handle that i need to do an user/password connection.
 
-## *Q2: Q2: Can you figure-out how to change your connection's configuration values ? E.g. change the KeepAliveInterval to 70s.*
+## *Q2: Can you figure-out how to change your connection's configuration values ? E.g. change the KeepAliveInterval to 70s.*
 
 Yes, Manage connections -> detailed -> KeepAliveInterval
 
