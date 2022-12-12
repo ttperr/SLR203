@@ -33,7 +33,7 @@ public class PublishingMqttClient {//synchronous client
             //clean session
             connectOptions.setCleanSession(cleanSession);
             //customise other connection options here...
-            //...
+            connectOptions.setWill(topic, "I'm going offline".getBytes(), qos, retained);
 
             ////connect the mqtt client to the broker
             System.out.println("Mqtt Client: Connecting to Mqtt Broker running at: " + brokerURI);
@@ -47,7 +47,8 @@ public class PublishingMqttClient {//synchronous client
                 message.setQos(qos);//set the message's QoS
                 message.setRetained(retained);//set the message's retained flag
                 mqttClient.publish(topic, message);//publish the message to a given topic
-                System.out.println("Mqtt Client: successfully published the message.");
+                System.out.println("Mqtt Client: successfully published the message n°"+ i +".");
+                Thread.sleep(1000);
             }
 
             ////disconnect the Mqtt Client
@@ -62,6 +63,8 @@ public class PublishingMqttClient {//synchronous client
             System.out.println("Mqtt Exception cause: " + e.getCause());
             System.out.println("Mqtt Exception reason: " + e);
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
