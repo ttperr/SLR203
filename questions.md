@@ -64,3 +64,13 @@ In this case, the QoS level of the publisher and subscriber does not affect the 
 
 I only received the message once, so the message was not stored by the broker.
 
+## *MQTT Binary Stream Client*
+
+### *How many bytes did the CONNACK message contain? What were their values? What is your interpretation of the byte values in the received CONNACK message? Do they make sense?*
+````
+0x20  // The first byte of the MQTT message (CONNACK Command Type and Control Flags)
+0x02  // The length of the remaining packet
+0x00  // The return code (0 indicates a successful connection)
+0x00  // The session present flag (0 indicates that the session is not present)
+````
+
