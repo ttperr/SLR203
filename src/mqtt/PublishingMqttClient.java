@@ -16,6 +16,7 @@ public class PublishingMqttClient {//synchronous client
         int qos = args[0].equals("0") ? 0 : args[0].equals("1") ? 1 : 2;
         boolean cleanSession = args[1].equals("true");
         boolean retained = args[2].equals("true");
+        int nbMessages = Integer.parseInt(args[3]);
         String brokerURI = "tcp://localhost:1883";
         String clientId = "myClientID_Pub";
         //MemoryPersistence persistence = new MemoryPersistence();
@@ -39,13 +40,15 @@ public class PublishingMqttClient {//synchronous client
             mqttClient.connect(connectOptions);
             System.out.println("Mqtt Client: sucessfully Connected.");
 
-            ////publish a message
-            System.out.println("Mqtt Client: Publishing message: " + messageContent);
-            MqttMessage message = new MqttMessage(messageContent.getBytes());//instantiate the message including its content (payload)
-            message.setQos(qos);//set the message's QoS
-            message.setRetained(retained);//set the message's retained flag
-            mqttClient.publish(topic, message);//publish the message to a given topic
-            System.out.println("Mqtt Client: successfully published the message.");
+            for(int i = 0; i < nbMessages; i++) {
+                ////publish a message
+                System.out.println("Mqtt Client: Publishing message n°" + i + " : " + messageContent);
+                MqttMessage message = new MqttMessage(messageContent.getBytes());//instantiate the message including its content (payload)
+                message.setQos(qos);//set the message's QoS
+                message.setRetained(retained);//set the message's retained flag
+                mqttClient.publish(topic, message);//publish the message to a given topic
+                System.out.println("Mqtt Client: successfully published the message.");
+            }
 
             ////disconnect the Mqtt Client
             mqttClient.disconnect();
