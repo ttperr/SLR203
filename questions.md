@@ -29,3 +29,38 @@ Yes, in the window below.
 ## *Q4: how can you tell whether the subscription was established correctly ?*
 
 Also in the window below.
+
+## *Clean Session and QoS Configurations*
+
+### *Test 4.1: Clean Session = True, QoS = 0*
+
+The clean session is on true, so the client will not store any information about the connection. The QoS is 0, so the message is sent and received only once. And the subscribing client will not receive it.
+
+### *Test 4.2: Clean Session = False, QoS = 0*
+
+The broker hasn't stored any information about the connection, so the client has not received the message.
+
+### *Test 4.3: Clean Session = False, QoS = 1*
+
+The broker has stored the information about the connection, so the client has received the message.
+
+### *Test 4.4: Clean Session = True, QoS = 1*
+
+The broker has not stored the information about the connection, so the client has not received the message.
+
+### *Test 4.5: Clean Session = False for the subscriber and true for the publisher, QoS = 1 for both clients*
+
+The broker has stored the information about the connection, so the client has received the message.
+
+### *Test 4.6: Same as above, except QoS = 0 for the publishers*
+
+QoS = 0 for the publisher and QoS = 1 for the subscriber so the client has not received the message.
+
+### *Test 4.7: Same as above, except QoS = 2 for both clients*
+
+In this case, the QoS level of the publisher and subscriber does not affect the outcome, since the message will not be stored by the broker due to the publisher's clean_session flag being set to true.
+
+### *Clean Session = True, QoS = 0 (for both clients) and retain = True*
+
+I only received the message once, so the message was not stored by the broker.
+

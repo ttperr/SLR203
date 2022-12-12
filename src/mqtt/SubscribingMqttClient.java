@@ -6,7 +6,8 @@ public class SubscribingMqttClient {
     public static void main(String[] args) {
 
         String topic = "labs/paho-example-topic";
-        int qos = 0;
+        int qos = args[0].equals("0") ? 0 : args[0].equals("1") ? 1 : 2;
+        boolean cleanSession = args[1].equals("true");
         String brokerURI = "tcp://localhost:1883";
         String clientId = "myClientID_Sub";
         //MemoryPersistence persistence = new MemoryPersistence();
@@ -20,7 +21,7 @@ public class SubscribingMqttClient {
             ////specify the Mqtt Client's connection options
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             //clean session
-            connectOptions.setCleanSession(true);
+            connectOptions.setCleanSession(cleanSession);
             //customise other connection options here...
             mqttClient.setCallback(new MqttCallback() {
 
@@ -67,5 +68,4 @@ public class SubscribingMqttClient {
             throw new RuntimeException(e);
         }
     }
-
 }
