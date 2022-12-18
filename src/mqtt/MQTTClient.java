@@ -35,7 +35,7 @@ public class MQTTClient {
 
         // Display the received CONNACK message, byte by byte
         for (byte b : connackPacket) {
-            System.out.println(String.format("0x%02X", b));
+            System.out.printf("0x%02X%n", b);
         }
 
         // Close the socket
