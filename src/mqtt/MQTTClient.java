@@ -1,44 +1,73 @@
 package mqtt;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 public class MQTTClient {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // Connect to the MQTT broker
-        Socket socket = new Socket("localhost", 1883);
+        try (Socket socket = new Socket("localhost", 1883)) {
+            // Get the input and output streams
+            InputStream in = socket.getInputStream();
+            OutputStream out = socket.getOutputStream();
 
-        // Get the input and output streams for the socket
-        InputStream in = socket.getInputStream();
-        OutputStream out = socket.getOutputStream();
+            // Define the CONNECT message byte array
+            // Set the command type (CONNECT) and control flags to 0
+            // Set the protocol name length to 4 (for "MQTT")
+            // Set the protocol level to 4 (for MQTT v3.1.1)
+            // Set the connect flags to 2 (clean session = true)
+            // Set the keep alive timer to 60 seconds (in seconds)
+            byte[] connectPacket = {
+                    0x10, // Command type and control flags
+                    0x13, // Remaining length
+                    0x00, 0x04, // Protocol name length
+                    'M', 'Q', 'T', 'T', // Protocol name
+                    0x04, // Protocol level
+                    0x02, // Connect flags
+                    0x00, 0x3c, // Keep alive timer
+                    0x00, 0x07, // Client ID length
+                    'T', 'r', 'i', 's', 't', 'a', 'n' // Client ID
+            };
 
-        // Define the byte array for the CONNECT message
-        byte[] connectPacket = {
-            0x10, // The first byte of the MQTT message (CONNECT Command Type and Control Flags)
-            0x0a, // The length of the remaining packet
-            0x00, 0x04, // The length of the Protocol Name (4 bytes)
-            0x4d, 0x51, 0x54, 0x54, // The Protocol Name ("MQTT")
-            0x04, // Protocol Level (4)
-            0x00, // Connect Flags
-            0x00, 0x3c, // Keep Alive (60 seconds)
-            0x00, 0x0a, // The length of the client ID
-            0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x74, 0x72 // The client ID ("testingstr")
-        };
+            // Send the CONNECT message to the broker
+            out.write(connectPacket);
 
-        // Send the CONNECT message to the broker
-        out.write(connectPacket);
+            // Read the broker's response message (CONNACK)
+            byte[] connackPacket = new byte[4];
+            in.read(connackPacket);
 
-        // Read the response from the broker (CONNACK)
-        byte[] connackPacket = new byte[4];
-        in.read(connackPacket);
+            // Display the contents of the CONNACK message, byte by byte
+            System.out.println("CONNACK message: ");
+            for (byte b : connackPacket) {
+                System.out.printf("0x%02x ", b);
+            }
 
-        // Display the received CONNACK message, byte by byte
-        for (byte b : connackPacket) {
-            System.out.printf("0x%02X%n", b);
+            // Define the PUBLISH message byte array
+            byte[] publishPacket = {
+                    0x30, // Command type and control flags
+                    0x0e, // Remaining length
+                    0x00, 0x05, // Topic length
+                    '/', 't', 'e', 's', 't', // Topic
+                    0x00, 0x05, // Message length
+                    'h', 'e', 'l', 'l', 'o' // Message
+            };
+
+            // Send the PUBLISH message to the broker
+            out.write(publishPacket);
+
+            // Read the broker's response message (PUBACK)
+            byte[] pubackPacket = new byte[4];
+            in.read(pubackPacket);
+
+            // Display the contents of the PUBACK message, byte by byte
+            System.out.println("PUBACK message: ");
+            for (byte b : pubackPacket) {
+                System.out.printf("0x%02x ", b);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        // Close the socket
-        socket.close();
     }
 }

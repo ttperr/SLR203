@@ -11,7 +11,7 @@ public class PublishingMqttClient {//synchronous client
 
     public static void main(String[] args) {
 
-        String topic = "labs/paho-example-topic";
+        String topic = "test";
         String messageContent = "Message from my Lab's Paho Mqtt Client at " + LocalDateTime.now();
         int qos = args[0].equals("0") ? 0 : args[0].equals("1") ? 1 : 2;
         boolean cleanSession = args[1].equals("true");
