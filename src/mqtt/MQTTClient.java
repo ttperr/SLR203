@@ -49,7 +49,7 @@ public class MQTTClient {
                     0x30, // Command type and control flags
                     0x0e, // Remaining length
                     0x00, 0x05, // Topic length
-                    '/', 't', 'e', 's', 't', // Topic
+                    't', 'e', 's', 't', '/', // Topic
                     0x00, 0x05, // Message length
                     'h', 'e', 'l', 'l', 'o' // Message
             };
